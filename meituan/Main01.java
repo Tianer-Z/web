@@ -1,4 +1,4 @@
-package examination.meituan;
+package meituan;
 
 import java.util.*;
 
