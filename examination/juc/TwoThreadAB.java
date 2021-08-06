@@ -1,59 +1,40 @@
 package examination.juc;
 
 public class TwoThreadAB {
-    private static boolean flag = true;
-    private static Object obj = new Object();
+    public static Object obj = new Object();
 
-    public static void main(String args[ ]) {
-
-        Thread tA = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    synchronized (obj) {
-                        if (!flag) {
-                            try {
-                                obj.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            System.out.println("A");
-                            flag = !flag;
-                            obj.notifyAll();
-                        }
-                    }
-                }
-
-            }
-        });
-
-        Thread tB = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    synchronized (obj) {
-                        if (flag) {
-                            try {
-                                obj.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            System.out.println("B");
-                            flag = !flag;
-                            obj.notifyAll();
-                        }
+    public static void main(String[] args) throws InterruptedException {
+        Thread threadA = new Thread(() -> {
+            while (true) {
+                synchronized (obj) {
+                    System.out.println("A");
+                    obj.notify();
+                    try {
+                        obj.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
         });
 
+        Thread threadB = new Thread(() -> {
+            while (true) {
+                synchronized (obj) {
+                    obj.notify();
+                    try {
+                        System.out.println("B");
+                        obj.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
-        tA.start();
-        tB.start();
-
-
+        threadA.start();
+        Thread.sleep(100);
+        threadB.start();
     }
 
 }

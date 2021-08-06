@@ -1,56 +1,49 @@
 package examination.juc;
 
 public class TwoThread100 {
-    private static Object obj = new Object();
-    private static int count = 1;
-    private static final int END = 101;
 
-    public static void main(String[] args) {
+    public static Object obj = new Object();
+    public static int count = 1;
 
-        Thread t1 = new Thread(new Runnable() {
+    public static void main(String[] args) throws InterruptedException {
+        Thread threadA = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                while (count <= 100) {
                     synchronized (obj) {
-                        if (count == END) {
-                            obj.notifyAll();
-                            return;
-                        }
                         System.out.println(Thread.currentThread().getName() + " " + count++);
+                        obj.notify();
                         try {
-                            obj.notifyAll();
                             obj.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+
                     }
                 }
             }
-        }, "t1");
+        },"线程A");
 
-        Thread t2 = new Thread(new Runnable() {
+        Thread threadB = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                while (count <= 100) {
                     synchronized (obj) {
-                        if (count == END) {
-                            obj.notifyAll();
-                            return;
-                        }
                         System.out.println(Thread.currentThread().getName() + " " + count++);
+                        obj.notify();
                         try {
-                            obj.notifyAll();
                             obj.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+
                     }
                 }
             }
-        }, "t2");
+        },"线程B");
 
-        t1.start();
-        t2.start();
-
+        threadA.start();
+        threadB.start();
     }
+
 }

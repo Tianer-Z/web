@@ -1,6 +1,7 @@
 package examination.pattern.singleton;
 
 public class DoubleCheckSingleon {
+
     private static volatile DoubleCheckSingleon instance;
 
     private DoubleCheckSingleon() {

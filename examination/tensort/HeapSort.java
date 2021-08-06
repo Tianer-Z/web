@@ -1,56 +1,50 @@
 package examination.tensort;
 
-import java.util.Arrays;
-
 public class HeapSort {
 
-    public int[] sort(int[] sourceArray) {
-        int[] arr = Arrays.copyOf(sourceArray, sourceArray.length);
-        buildMaxHeap(arr);
-
-        for (int i = arr.length - 1; i > 0; i--) {
-            swap(arr,0, i);
-            heapify(arr, 0, i);
-        }
-        return arr;
-    }
-
-    public void buildMaxHeap(int[] arr) {
-        int len = arr.length;
-        for (int i = len / 2 - 1; i >= 0 ; i--) {
-            heapify(arr, i, len);
+    public void sort(int[] nums) {
+        int length = nums.length;
+        buildMaxHeap(nums, length);
+        for (int i = length - 1; i >= 0; i--) {
+            swap(0, i, nums);
+            heapify(0, i, nums);
         }
     }
 
-    public void heapify(int[] arr, int i, int len) {
+    public void buildMaxHeap(int[] nums, int length) {
+        for (int i = length / 2 - 1; i >= 0; i--) {
+            heapify(i, length, nums);
+        }
+    }
+
+    public void heapify(int i, int length, int[] nums) {
         int left = 2 * i + 1;
         int right = 2 * i + 2;
         int largest = i;
-
-        if (left < len && arr[left] > arr[largest]) {
+        if (left < length && nums[left] > nums[largest]) {
             largest = left;
         }
-        if (right < len && arr[right] > arr[largest]) {
+        if (right < length && nums[right] > nums[largest]) {
             largest = right;
         }
-        if (largest != i) {
-            swap(arr, i, largest);
-            heapify(arr, largest, len);
+        if (i != largest) {
+            swap(largest, i, nums);
+            heapify(largest, length, nums);
         }
     }
 
-    public void swap(int[] arr, int x, int y) {
-        int temp = arr[x];
-        arr[x] = arr[y];
-        arr[y] = temp;
+    public void swap(int x, int y, int[] nums) {
+        int temp = nums[x];
+        nums[x] = nums[y];
+        nums[y] = temp;
     }
 
-    public static void main(String[] args) {
-        int[] sourceArray = new int[]{3, 1, 4, 2, 5, 0};
-        int[] arr = new HeapSort().sort(sourceArray);
 
-        for (int num : arr) {
-            System.out.print(num + " ");
+    public static void main(String[] args) {
+        int[] nums = new int[]{3, 1, 4, 2, 5, 0};
+        new HeapSort().sort(nums);
+        for (int num : nums) {
+            System.out.println(num);
         }
     }
 

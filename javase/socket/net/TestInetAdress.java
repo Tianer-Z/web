@@ -42,7 +42,7 @@ public class TestInetAdress {
             System.out.println(inetAddress3);
 
             //查询网络地址
-            InetAddress inetAddress4 = InetAddress.getByName("www.baidu.com");
+            InetAddress inetAddress4 = InetAddress.getByName("www.bishi.shuqishixi.baidu.com");
             System.out.println(inetAddress4);
 
             //常用方法

@@ -1,41 +1,51 @@
 package examination;
 
-
-class Person {
-
-    public Person () {
-        func(); }
-
-    public void func() { System.out.println("1, "); }
-
-}
-
- class Teacher extends Person {
-
-    public Teacher () {
-        super();
-
-    }
-
-    public Teacher(int a) { System.out.println (a); }
-
-    public void func() { System.out.print ("2, "); }
-
-
-
-}
-
-
-
-
+/**
+ * @Author: Zhangsl
+ * @Date: 2021/08/04
+ */
 public class Test {
+    public static Object obj = new Object();
+    public static int count = 1;
+    public static void main(String[] args) throws InterruptedException {
+        Thread threadA = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (count <= 100) {
+                    synchronized (obj) {
+                        System.out.println(Thread.currentThread().getName() + " " + count++);
+                        obj.notify();
+                        try {
+                            obj.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
-        public static void main(String[] args) {
+                    }
+                }
+            }
+        },"线程A");
 
-            Teacher t1 = new Teacher ();
+        Thread threadB = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (count <= 100) {
+                    synchronized (obj) {
+                        System.out.println(Thread.currentThread().getName() + " " + count++);
+                        obj.notify();
+                        try {
+                            obj.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
-            Teacher t2 = new Teacher(3);
+                    }
+                }
+            }
+        },"线程B");
 
 
+        threadA.start();
+        threadB.start();
     }
 }
